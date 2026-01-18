@@ -8,6 +8,9 @@ import {
 } from "./mahjong.js";
 
 const TENPAI_HAND_SIZE = 16;
+const assetBasePath = window.location.pathname.endsWith("/")
+  ? window.location.pathname
+  : `${window.location.pathname}/`;
 
 const tenpaiHandEl = document.getElementById("tenpai-hand");
 const tenpaiResultEl = document.getElementById("tenpai-result");
@@ -51,7 +54,7 @@ const createTileElement = (tileId, safetyMap = new Map()) => {
     tileEl.title = safety.note;
   }
   const img = document.createElement("img");
-  img.src = `assets/tiles/${tile.image}`;
+  img.src = `${assetBasePath}assets/tiles/${tile.image}`;
   img.alt = tile.label;
   tileEl.appendChild(img);
   return tileEl;
@@ -73,7 +76,7 @@ const renderTenpaiOptions = () => {
     button.className = "tile-option";
     button.dataset.tileId = tile.id;
     const img = document.createElement("img");
-    img.src = `assets/tiles/${tile.image}`;
+    img.src = `${assetBasePath}assets/tiles/${tile.image}`;
     img.alt = tile.label;
     button.appendChild(img);
     button.addEventListener("click", () => {
