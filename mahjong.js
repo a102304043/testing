@@ -1,5 +1,6 @@
 export const tileTypes = [];
 const suitLabels = ["萬", "筒", "索"];
+const suitPrefixes = ["Man", "Pin", "Sou"];
 const honorLabels = ["東", "南", "西", "北", "白", "發", "中"];
 
 for (let suit = 0; suit < 3; suit += 1) {
@@ -7,6 +8,7 @@ for (let suit = 0; suit < 3; suit += 1) {
     tileTypes.push({
       id: `${suit}${num}`,
       label: `${num}${suitLabels[suit]}`,
+      image: `${suitPrefixes[suit]}${num}.svg`,
       isHonor: false,
       suit,
       number: num,
@@ -14,10 +16,13 @@ for (let suit = 0; suit < 3; suit += 1) {
   }
 }
 
+const honorImageMap = ["Ton", "Nan", "Shaa", "Pei", "Haku", "Hatsu", "Chun"];
+
 honorLabels.forEach((label, index) => {
   tileTypes.push({
     id: `h${index + 1}`,
     label,
+    image: `${honorImageMap[index]}.svg`,
     isHonor: true,
     suit: 3,
     number: index + 1,
@@ -25,6 +30,7 @@ honorLabels.forEach((label, index) => {
 });
 
 export const tileMap = new Map(tileTypes.map((tile) => [tile.id, tile]));
+export const tileIndexMap = new Map(tileTypes.map((tile, index) => [tile.id, index]));
 
 export const buildDeck = () => {
   const deck = [];
