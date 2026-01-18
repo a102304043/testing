@@ -17,18 +17,14 @@
       <div class="panel-header">
         <h2>聽牌練習</h2>
         <div class="controls">
-          <label>
-            手牌張數
-            <select id="hand-size">
-              <option value="13">13 張（標準）</option>
-              <option value="16">16 張（台灣）</option>
-            </select>
-          </label>
-          <button id="deal-tenpai">重新發牌</button>
+          <button id="tenpai-reset">重新發牌</button>
+          <button class="ghost" id="tenpai-check">提交答案</button>
         </div>
       </div>
       <div class="hand" id="tenpai-hand"></div>
       <div class="result" id="tenpai-result"></div>
+      <div class="options" id="tenpai-options"></div>
+      <div class="result" id="tenpai-feedback"></div>
     </section>
 
     <section class="panel">

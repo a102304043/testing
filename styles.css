@@ -98,15 +98,21 @@ button.ghost {
 }
 
 .tile {
-  padding: 8px 10px;
+  padding: 6px 8px;
   border-radius: 10px;
   border: 1px solid #d1d5db;
   background: #fefefe;
-  font-weight: 600;
-  font-size: 15px;
-  min-width: 52px;
-  text-align: center;
+  min-width: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.tile img {
+  width: 44px;
+  height: 64px;
+  object-fit: contain;
 }
 
 .tile.safety-safe {
@@ -139,6 +145,34 @@ button.ghost {
 .result ul {
   margin: 8px 0 0;
   padding-left: 20px;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(54px, 1fr));
+  gap: 8px;
+}
+
+.tile-option {
+  padding: 6px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tile-option img {
+  width: 40px;
+  height: 58px;
+}
+
+.tile-option.selected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .table {

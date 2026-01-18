@@ -1,17 +1,24 @@
 import {
   tileMap,
   tileTypes,
+  tileIndexMap,
   drawTiles,
   calculateTenpaiWaits,
   buildSafetyMap,
 } from "./mahjong.js";
 
+const TENPAI_HAND_SIZE = 16;
+
 const tenpaiHandEl = document.getElementById("tenpai-hand");
 const tenpaiResultEl = document.getElementById("tenpai-result");
+const tenpaiOptionsEl = document.getElementById("tenpai-options");
+const tenpaiCheckButton = document.getElementById("tenpai-check");
+const tenpaiResetButton = document.getElementById("tenpai-reset");
+const tenpaiFeedbackEl = document.getElementById("tenpai-feedback");
+
 const discardHandEl = document.getElementById("discard-hand");
 const discardResultEl = document.getElementById("discard-result");
 
-const handSizeSelect = document.getElementById("hand-size");
 const discardHandSizeSelect = document.getElementById("discard-hand-size");
 
 const tileSelect = document.getElementById("tile-select");
@@ -26,35 +33,91 @@ const discardZones = [
 ];
 
 let tenpaiHand = [];
+let tenpaiWaits = [];
+let tenpaiSelections = new Set();
 let discardHand = [];
 let opponentDiscards = [[], [], []];
 
+const sortTiles = (tiles) =>
+  [...tiles].sort((a, b) => tileIndexMap.get(a) - tileIndexMap.get(b));
+
+const createTileElement = (tileId, safetyMap = new Map()) => {
+  const tile = tileMap.get(tileId);
+  const tileEl = document.createElement("div");
+  tileEl.className = "tile";
+  const safety = safetyMap.get(tileId);
+  if (safety) {
+    tileEl.classList.add(`safety-${safety.level}`);
+    tileEl.title = safety.note;
+  }
+  const img = document.createElement("img");
+  img.src = `assets/tiles/${tile.image}`;
+  img.alt = tile.label;
+  tileEl.appendChild(img);
+  return tileEl;
+};
+
 const renderTiles = (container, tiles, safetyMap = new Map()) => {
   container.innerHTML = "";
-  tiles.forEach((tileId) => {
-    const tile = tileMap.get(tileId);
-    const tileEl = document.createElement("div");
-    tileEl.className = "tile";
-    const safety = safetyMap.get(tileId);
-    if (safety) {
-      tileEl.classList.add(`safety-${safety.level}`);
-      tileEl.title = safety.note;
-    }
-    tileEl.textContent = tile.label;
-    container.appendChild(tileEl);
+  sortTiles(tiles).forEach((tileId) => {
+    container.appendChild(createTileElement(tileId, safetyMap));
+  });
+};
+
+const renderTenpaiOptions = () => {
+  tenpaiOptionsEl.innerHTML = "";
+  tenpaiSelections = new Set();
+  tileTypes.forEach((tile) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "tile-option";
+    button.dataset.tileId = tile.id;
+    const img = document.createElement("img");
+    img.src = `assets/tiles/${tile.image}`;
+    img.alt = tile.label;
+    button.appendChild(img);
+    button.addEventListener("click", () => {
+      if (tenpaiSelections.has(tile.id)) {
+        tenpaiSelections.delete(tile.id);
+        button.classList.remove("selected");
+      } else {
+        tenpaiSelections.add(tile.id);
+        button.classList.add("selected");
+      }
+    });
+    tenpaiOptionsEl.appendChild(button);
   });
 };
 
 const renderTenpai = () => {
-  const handSize = Number(handSizeSelect.value);
-  tenpaiHand = drawTiles(handSize);
+  tenpaiHand = drawTiles(TENPAI_HAND_SIZE);
+  tenpaiWaits = calculateTenpaiWaits(tenpaiHand, TENPAI_HAND_SIZE);
   renderTiles(tenpaiHandEl, tenpaiHand);
-  const waits = calculateTenpaiWaits(tenpaiHand, handSize);
-  if (waits.length === 0) {
-    tenpaiResultEl.innerHTML = "目前沒有聽牌，試著分析哪些搭子可以改善。";
+  renderTenpaiOptions();
+  tenpaiResultEl.textContent = "請點選可胡牌的牌張，完成後按「提交答案」。";
+  tenpaiFeedbackEl.textContent = "";
+};
+
+const checkTenpaiAnswer = () => {
+  const selected = [...tenpaiSelections].map((id) => tileMap.get(id).label);
+  const selectedSet = new Set(selected);
+  const waitSet = new Set(tenpaiWaits);
+  const allCorrect =
+    selectedSet.size === waitSet.size &&
+    [...selectedSet].every((tile) => waitSet.has(tile));
+
+  if (tenpaiWaits.length === 0) {
+    tenpaiFeedbackEl.textContent =
+      "這題沒有聽牌（沒有可胡牌）。";
     return;
   }
-  tenpaiResultEl.innerHTML = `可聽牌：${waits.join("、")}`;
+
+  if (allCorrect) {
+    tenpaiFeedbackEl.textContent = `答對了！可胡牌：${tenpaiWaits.join("、")}`;
+    return;
+  }
+
+  tenpaiFeedbackEl.textContent = `正確答案：${tenpaiWaits.join("、")}`;
 };
 
 const populateTileSelect = () => {
@@ -126,12 +189,10 @@ populateTileSelect();
 renderTenpai();
 renderDiscardPractice();
 
-handSizeSelect.addEventListener("change", renderTenpai);
+tenpaiCheckButton.addEventListener("click", checkTenpaiAnswer);
+tenpaiResetButton.addEventListener("click", renderTenpai);
 
-const dealTenpaiButton = document.getElementById("deal-tenpai");
 const dealDiscardButton = document.getElementById("deal-discard");
-
-dealTenpaiButton.addEventListener("click", renderTenpai);
 
 dealDiscardButton.addEventListener("click", renderDiscardPractice);
 
