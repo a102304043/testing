@@ -1,1 +1,37 @@
-# testing
+# 台灣麻將練習器
+
+此專案提供兩種練習模式：
+
+1. **聽牌練習**：隨機產生 16 張手牌並計算可聽牌，協助使用者判斷等待牌。
+2. **出牌安全練習**：模擬牌局棄牌資訊，提示每張手牌的安全等級（現物／較安全／風險高）。
+
+## 使用方式
+
+1. 啟動本地伺服器：
+
+```bash
+python -m http.server 8000
+```
+
+2. 開啟瀏覽器進入 `http://localhost:8000`。
+
+## 測試
+
+```bash
+npm test
+```
+
+## GitHub 上直接運行（GitHub Pages）
+
+1. 將專案推送到 GitHub。
+2. 在 GitHub 專案設定中開啟 **Pages**，選擇部署來源為 `main`/`work` 分支與根目錄。
+3. 等待部署完成後，使用 GitHub Pages 提供的網址即可直接在瀏覽器使用。
+
+## 功能備註
+
+- 聽牌練習以 16 張台灣麻將規則為主。
+- 出牌安全等級目前以現物與明牌數量判斷，可自行擴充筋、壁等進階規則。
+
+## 圖片來源
+
+本專案使用的麻將牌圖片來自 FluffyStuff 的 [riichi-mahjong-tiles](https://github.com/FluffyStuff/riichi-mahjong-tiles)（CC0 公眾領域）。 

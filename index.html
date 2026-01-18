@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>台灣麻將練習器</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <h1>台灣麻將練習器</h1>
+      <p>專注於聽牌判斷與安全出牌練習的輕量工具。</p>
+    </header>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>聽牌練習</h2>
+        <div class="controls">
+          <button id="tenpai-reset">重新發牌</button>
+          <button class="ghost" id="tenpai-check">提交答案</button>
+        </div>
+      </div>
+      <div class="hand" id="tenpai-hand"></div>
+      <div class="result" id="tenpai-result"></div>
+      <div class="options" id="tenpai-options"></div>
+      <div class="result" id="tenpai-feedback"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>出牌安全練習</h2>
+        <div class="controls">
+          <label>
+            手牌張數
+            <select id="discard-hand-size">
+              <option value="14">14 張（標準）</option>
+              <option value="17">17 張（台灣）</option>
+            </select>
+          </label>
+          <button id="deal-discard">重新模擬牌局</button>
+        </div>
+      </div>
+      <div class="hand" id="discard-hand"></div>
+
+      <div class="table">
+        <h3>對手棄牌（可手動新增）</h3>
+        <div class="discard-inputs">
+          <label>
+            對手
+            <select id="opponent-select">
+              <option value="0">下家</option>
+              <option value="1">對家</option>
+              <option value="2">上家</option>
+            </select>
+          </label>
+          <label>
+            牌張
+            <select id="tile-select"></select>
+          </label>
+          <button id="add-discard">新增棄牌</button>
+          <button class="ghost" id="reset-discards">清空棄牌</button>
+        </div>
+        <div class="discard-zones">
+          <div class="discard-zone">
+            <h4>下家</h4>
+            <div class="discard-list" id="discard-0"></div>
+          </div>
+          <div class="discard-zone">
+            <h4>對家</h4>
+            <div class="discard-list" id="discard-1"></div>
+          </div>
+          <div class="discard-zone">
+            <h4>上家</h4>
+            <div class="discard-list" id="discard-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result" id="discard-result"></div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
